@@ -9,13 +9,13 @@ go get -u github.com/EmirShimshir/inMemoryCache
 ## Description
 Go in-memory cache helps you store data of different types in a cache and access them by key.
 
-__inMemoryCache.New()__ - constructor for new cache
+```inMemoryCache.New()``` - constructor for new cache
 
-__Set(key string, value interface{}) error__ - write the __value__ to the cache by the __key__. The __key__ must not be empty.
+```Set(key string, value interface{}) error``` - write the __value__ to the cache by the __key__. The __key__ must not be empty.
 
-__Get(key string) (interface{}, error)__ - get the __value__ from the cache by the __key__. The __key__ must not be empty and the __value__ must exist.
+```Get(key string) (interface{}, error)``` - get the __value__ from the cache by the __key__. The __key__ must not be empty and the __value__ must exist.
 
-__Delete(key) error__ - delete the __value__ from the cache by the __key__. The __key__ must not be empty and the __value__ must exist.
+```Delete(key) error``` - delete the __value__ from the cache by the __key__. The __key__ must not be empty and the __value__ must exist.
 
 ## Example
 
