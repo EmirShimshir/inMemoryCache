@@ -2,31 +2,37 @@ package inMemoryCache
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
-type cacheMethods interface {
+type cache interface {
 	Set(key string, value any, ttl time.Duration) error
 	Get(key string) (any, error)
 	Delete(key string) error
 }
 
-type data struct {
+type cacheData struct {
 	value      any
 	timeDelete time.Time
 }
 
-type cache struct {
-	storage map[string]data
+type cacheMem struct {
+	storage map[string]cacheData
+	mu      *sync.RWMutex
 }
 
-func New() *cache {
-	return &cache{
-		storage: make(map[string]data),
+func New() *cacheMem {
+	return &cacheMem{
+		storage: make(map[string]cacheData),
+		mu:      new(sync.RWMutex),
 	}
 }
 
-func (c *cache) Set(key string, value any, ttl time.Duration) error {
+func (c *cacheMem) Set(key string, value any, ttl time.Duration) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
 	if key == "" {
 		return fmt.Errorf("empty key")
 	}
@@ -35,12 +41,15 @@ func (c *cache) Set(key string, value any, ttl time.Duration) error {
 		return fmt.Errorf("time-to-live equals zero")
 	}
 
-	c.storage[key] = data{value: value, timeDelete: time.Now().Add(ttl)}
+	c.storage[key] = cacheData{value: value, timeDelete: time.Now().Add(ttl)}
 
 	return nil
 }
 
-func (c *cache) Get(key string) (any, error) {
+func (c *cacheMem) Get(key string) (any, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
 	if key == "" {
 		return nil, fmt.Errorf("empty key")
 	}
@@ -60,7 +69,10 @@ func (c *cache) Get(key string) (any, error) {
 	return data.value, nil
 }
 
-func (c *cache) Delete(key string) error {
+func (c *cacheMem) Delete(key string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
 	if key == "" {
 		return fmt.Errorf("empty key")
 	}

@@ -1,4 +1,4 @@
-# Go in-memory cache
+# Go thread-safe in-memory cache with element lifetime.
 
 ## Installation
 
@@ -7,7 +7,7 @@ go get -u github.com/EmirShimshir/inMemoryCache
 ```
 
 ## Description
-Go in-memory cache helps you store data of different types in a cache and access them by key. When adding a new element to the cache, specify the time after which the element will be unavailable.
+Go in-memory cache is goroutine-safe, it helps you store data of different types in a cache and access them by key. When adding a new element to the cache, specify the time after which the element will be unavailable.
 
 ```inMemoryCache.New()``` - constructor for new cache
 
