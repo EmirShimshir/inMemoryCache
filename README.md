@@ -7,11 +7,11 @@ go get -u github.com/EmirShimshir/inMemoryCache
 ```
 
 ## Description
-Go in-memory cache helps you store data of different types in a cache and access them by key.
+Go in-memory cache helps you store data of different types in a cache and access them by key. When adding a new element to the cache, specify the time after which the element will be unavailable.
 
 ```inMemoryCache.New()``` - constructor for new cache
 
-```Set(key string, value interface{}) error``` - write the __value__ to the cache by the __key__. The __key__ must not be empty.
+```Set(key string, value any, ttl time.Duration) error``` - write the __value__ to the cache by the __key__. The __key__ must not be empty. The __ttl__ is time to live for the new element, it must not be zero.
 
 ```Get(key string) (interface{}, error)``` - get the __value__ from the cache by the __key__. The __key__ must not be empty and the __value__ must exist.
 
@@ -24,37 +24,37 @@ package main
 
 import (
 	"fmt"
-	"log"
-
 	"github.com/EmirShimshir/inMemoryCache"
+	"log"
+	"time"
 )
 
 func main() {
 	cache := inMemoryCache.New()
 
-	err := cache.Set("1", 42)
-	if err != nil {
-		log.Println(err.Error())
-		return
+	err := cache.Set("userId", 42, 5 * time.Second)
+	if err != nil { // err == nil
+		log.Fatal(err)
 	}
 
-	value, err := cache.Get("1")
-	if err != nil {
-		log.Println(err.Error())
-		return
+	userId, err := cache.Get("userId")
+	if err != nil { // err == nil
+		log.Fatal(err)
 	}
+	fmt.Println(userId) // Output: 42
 
-	fmt.Printf("value: %v\n", value)
+	time.Sleep(6 * time.Second)
 
-	err = cache.Delete("1")
-	if err != nil {
-		log.Println(err.Error())
-		return
+	userId, err = cache.Get("userId")
+	if err != nil { // err != nil
+		log.Fatal(err) // <--
 	}
 }
 
 ```
 
 ```
-value: 42
+42
+2022/07/27 14:43:08 no value for the key userId
+exit status 1
 ```
