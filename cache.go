@@ -61,7 +61,7 @@ func (c *cacheMem) Get(key string) (any, error) {
 	}
 
 	if time.Now().After(data.timeDelete) {
-		_ = c.Delete(key)
+		delete(c.storage, key)
 
 		return nil, fmt.Errorf("no value for the key %s", key)
 	}
