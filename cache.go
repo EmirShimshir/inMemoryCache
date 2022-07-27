@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type CacheMethods interface {
+type cacheMethods interface {
 	Set(key string, value any, ttl time.Duration) error
 	Get(key string) (any, error)
 	Delete(key string) error
@@ -16,17 +16,17 @@ type data struct {
 	timeDelete time.Time
 }
 
-type Cache struct {
+type cache struct {
 	storage map[string]data
 }
 
-func New() *Cache {
-	return &Cache{
+func New() *cache {
+	return &cache{
 		storage: make(map[string]data),
 	}
 }
 
-func (c *Cache) Set(key string, value any, ttl time.Duration) error {
+func (c *cache) Set(key string, value any, ttl time.Duration) error {
 	if key == "" {
 		return fmt.Errorf("empty key")
 	}
@@ -40,7 +40,7 @@ func (c *Cache) Set(key string, value any, ttl time.Duration) error {
 	return nil
 }
 
-func (c *Cache) Get(key string) (any, error) {
+func (c *cache) Get(key string) (any, error) {
 	if key == "" {
 		return nil, fmt.Errorf("empty key")
 	}
@@ -60,7 +60,7 @@ func (c *Cache) Get(key string) (any, error) {
 	return data.value, nil
 }
 
-func (c *Cache) Delete(key string) error {
+func (c *cache) Delete(key string) error {
 	if key == "" {
 		return fmt.Errorf("empty key")
 	}
