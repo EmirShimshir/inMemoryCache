@@ -24,13 +24,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/EmirShimshir/inMemoryCache"
 	"log"
 	"time"
+
+	"github.com/EmirShimshir/inMemoryCache"
 )
 
 func main() {
-	cache := inMemoryCache.New()
+	var cache inMemoryCache.Cache
+	cache = inMemoryCache.New()
 
 	err := cache.Set("userId", 42, 5 * time.Second)
 	if err != nil { // err == nil
