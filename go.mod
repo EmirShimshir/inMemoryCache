@@ -1,3 +1,3 @@
-module github.com/EmirShimshir/inMemoryCache/v2
+module github.com/EmirShimshir/inMemoryCache
 
 go 1.18
