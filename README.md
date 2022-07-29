@@ -1,4 +1,4 @@
-# Go thread-safe in-memory cache with element lifetime.
+# Go thread-safe in-memory cache with element time-to-live.
 
 ## Installation
 
