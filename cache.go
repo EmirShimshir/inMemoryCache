@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type cache interface {
+type Cache interface {
 	Set(key string, value any, ttl time.Duration) error
 	Get(key string) (any, error)
 	Delete(key string) error
@@ -19,13 +19,12 @@ type cacheData struct {
 
 type cacheMem struct {
 	storage map[string]cacheData
-	mu      *sync.RWMutex
+	mu      sync.RWMutex
 }
 
-func New() *cacheMem {
+func New() Cache {
 	return &cacheMem{
 		storage: make(map[string]cacheData),
-		mu:      new(sync.RWMutex),
 	}
 }
 
